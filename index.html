@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Поиск фильмов</title>
+</head>
+
+<body>
+  <div id="masonry"></div>
+  <div class="tasks-list-section mt-5">
+    <div class="container">
+      <h1 class="text-center mb-4">Сервис по поиску фильмов</h1>
+      <div class="btn-section text-center">
+        <button class="btn btn-secondary mr-3 moviesBtn active" type="button">Фильмы</button>
+        <button class="btn btn-secondary bookmarksBtn" type="button">Закладки</button>
+      </div>
+      <form name="addTask" id="searchForm" class="d-flex">
+        <input class="place_for_search form-control mt-4" type="text" id="text-to-find" value="" placeholder="Поиск"
+          autofocus>
+        <input class="button_for_turn_back" type="button" value=" " title="Отменить поиск">
+        <input class="button_for_search" type="submit" value=" " title="Начать поиск">
+      </form>
+      <div class="tagsBlock mt-4 d-flex justify-content-center flex-wrap"></div>
+      <div class="text-section"></div>
+      <ul class="list-group mt-2 mb-4 d-flex">
+      </ul>
+    </div>
+  </div>
+
+
+  <script src="build/build.js"></script>
+</body>
+
+</html>
