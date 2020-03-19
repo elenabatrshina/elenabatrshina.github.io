@@ -13,11 +13,6 @@
   justify-content: center;
 }
 
-.active {
-  box-shadow: 0 0 0 0.2rem rgba(130,138,145,.5);
-  transform: scale(1.1);
-}
-
 #searchForm {
   position: relative;
 }
@@ -26,10 +21,18 @@ button:focus {
   box-shadow: none !important;
 }
 
-.btn-outline-dark:hover {
-  color: #343a40;
-  background-color: transparent;
-  border: 1px solid #343a40;
+.btn-outline-dark:hover, .btn-outline-dark:active, .btn-outline-dark:focus {
+  color: #343a40 !important;
+  background-color: transparent !important;
+  border: 1px solid #343a40 !important;
+}
+
+.btn-outline-dark.active {
+  box-shadow: 0 0 0 0.2rem rgba(130,138,145,.5);
+  transform: scale(1.1);
+  color: #fff !important;
+  background-color: #343a40 !important;
+  border-color: #343a40 !important;
 }
 
 .button_for_turn_back, .button_for_search {
