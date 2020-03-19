@@ -22,6 +22,10 @@
   position: relative;
 }
 
+button:focus {
+  box-shadow: none !important;
+}
+
 .button_for_turn_back, .button_for_search {
 position: absolute;
 background-size: cover;

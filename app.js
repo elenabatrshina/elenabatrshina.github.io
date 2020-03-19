@@ -209,7 +209,6 @@ tagsDiv.addEventListener('click', (e) => {
     if (!e.target.classList.contains('active')) {
       isTaged = false;
     }
-    console.log(isTaged)
     document.querySelector('.text-section').textContent = "";
     if (!moviesWithTagsRepeatArr.length) {
       document.querySelector('.text-section').textContent = "Нет элементов, удовлетворяющих поиску"
@@ -240,7 +239,6 @@ function FindOnPage() {
   if (isTaged) {
     createSearchArr(moviesWithTagsRepeatArr)
   } else createSearchArr(Object.values(objOfMovies))
-  console.log(isTaged)
 
   function createSearchArr(arr) {
     arr.forEach((item) => {
