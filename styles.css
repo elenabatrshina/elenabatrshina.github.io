@@ -26,6 +26,12 @@ button:focus {
   box-shadow: none !important;
 }
 
+.btn-outline-dark:hover {
+  color: #343a40;
+  background-color: transparent;
+  border: 1px solid #343a40;
+}
+
 .button_for_turn_back, .button_for_search {
 position: absolute;
 background-size: cover;
