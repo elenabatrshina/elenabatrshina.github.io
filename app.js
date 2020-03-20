@@ -34,7 +34,19 @@ bookmarksBtn.addEventListener('click', showFavoriteMovies);
 moviesBtn.addEventListener('click', showAllMovies);
 listContainer.addEventListener('click', onFavoritehandler);
 
-function listItemTemplate({ title, tags, id, favorite } = {}) {
+document.querySelector('#searchForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  findOnPage();
+  isSubmit = !isSubmit;
+})
+
+btnForTurnBack.addEventListener('click', () => {
+  document.getElementById('text-to-find').value = "";
+  findOnPage();
+  isSubmit = !isSubmit;
+});
+
+function listItemTemplate({ title, id, favorite } = {}) {
   const li = document.createElement('li');
   li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mt-2');
   li.setAttribute('data-movie-id', id);
@@ -59,14 +71,13 @@ function listItemTemplate({ title, tags, id, favorite } = {}) {
   return li;
 }
 
-function getMoviesListRange(movies, from, to, className) {
+function getMoviesListRange(movies, from, to) {
   let template = [];
 
   if (movies.length <= to) { to = movies.length; }
 
   for (let i = from; i < to; i++) {
     const li = listItemTemplate(movies[i]);
-    li.classList.add(className);
     template.push(li);
   }
 
@@ -96,8 +107,7 @@ function moviesHTML(list) {
   });
 
   listContainer.appendChild(fragment);
-};
-moviesHTML(getMoviesListRange(movies, 0, 15));
+}
 
 // -- Favorites --
 function onFavoritehandler(event) {
@@ -108,7 +118,6 @@ function onFavoritehandler(event) {
     if (!showAll) {
       parent.classList.add('hide');
       parent.classList.remove('show');
-
     }
 
     if (objOfMovies[id].favorite) {
@@ -116,10 +125,10 @@ function onFavoritehandler(event) {
     } else event.target.setAttribute('src', 'images/star.png');
 
     let favMoviesArr = getFavoriteMovies();
-    localStorage.setItem("favMoviesArr", favMoviesArr.map(movie => movie.title))
-  }
-};
+    localStorage.setItem("favMoviesArr", favMoviesArr.map(movie => movie.title));
 
+  }
+}
 
 function showFavoriteMovies() {
   showAll = false;
@@ -135,6 +144,16 @@ function showFavoriteMovies() {
   [...arrHTML].forEach((item) => {
     item.remove();
   });
+
+
+  const tagBtnArr = document.querySelectorAll('.tagBtn');
+  [...tagBtnArr].forEach(btn => {
+    if (btn.classList.contains('active')) {
+      btn.classList.remove('active');
+      isTagged = false;
+      activeTagsArr = [];
+    }
+  })
 
   moviesHTML(getMoviesListRange(favMoviesArr, 0, 15));
 }
@@ -172,16 +191,25 @@ function createTagButtons() {
   });
   tagsDiv.appendChild(fragment);
 }
-createTagButtons();
 
 let activeTagsArr = [];
 let moviesWithTagsRepeatArr;
 let matchArr;
 let isSubmit = false;
-let isTaged = false;
+let isTagged = false;
+let isnotActive;
+
+function createMatchArr(arr) {
+  arr.forEach((item) => {
+    if (activeTagsArr.every(tag => item.tags.includes(tag))) {
+      moviesWithTagsRepeatArr.push(item);
+    }
+  });
+}
+
 tagsDiv.addEventListener('click', (e) => {
   if (e.target.tagName === "BUTTON") {
-    isTaged = true;
+    isTagged = true;
     if (e.target.classList.contains('active')) {
       activeTagsArr.splice(activeTagsArr.indexOf(e.target.getAttribute('data-tag-title')), 1);
     } else activeTagsArr.push(e.target.getAttribute('data-tag-title'));
@@ -196,47 +224,39 @@ tagsDiv.addEventListener('click', (e) => {
       createMatchArr(matchArr)
     } else createMatchArr(Object.values(objOfMovies))
 
-    function createMatchArr(arr) {
-      arr.forEach((item) => {
-        if (activeTagsArr.every(tag => item.tags.includes(tag))) {
-          moviesWithTagsRepeatArr.push(item);
-        }
-      });
-    }
+    // TODO: вынести
+
     moviesHTML(getMoviesListRange(moviesWithTagsRepeatArr, 0, 15));
 
     e.target.classList.toggle('active');
     if (!e.target.classList.contains('active')) {
-      isTaged = false;
+      isTagged = false;
     }
     document.querySelector('.text-section').textContent = "";
     if (!moviesWithTagsRepeatArr.length) {
       document.querySelector('.text-section').textContent = "Нет элементов, удовлетворяющих поиску"
     } else document.querySelector('.text-section').textContent = "";
+
+    const tagBtnArr = document.querySelectorAll('.tagBtn');
+    isnotActive = [...tagBtnArr].every(btn => {
+      return !btn.classList.contains('active')
+    });
+
+    if (isnotActive) {
+      document.getElementById('text-to-find').value = "";
+      findOnPage();
+      isSubmit = !isSubmit;
+    }
   }
 })
 
-
-// --  Text to find --
-
-document.querySelector('#searchForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  FindOnPage();
-  isSubmit = !isSubmit;
-})
-
-btnForTurnBack.addEventListener('click', () => {
-  document.getElementById('text-to-find').value = "";
-  FindOnPage();
-});
-
-function FindOnPage() {
+function findOnPage() {
   let input = document.getElementById('text-to-find');
   input.value = input.value.trim();
 
   matchArr = [];
 
-  if (isTaged) {
+  if (isTagged) {
     createSearchArr(moviesWithTagsRepeatArr)
   } else createSearchArr(Object.values(objOfMovies))
 
@@ -256,7 +276,7 @@ function FindOnPage() {
   } else document.querySelector('.text-section').textContent = "";
 }
 
-
-  // -- / Text to find --
+moviesHTML(getMoviesListRange(movies, 0, 15));
+createTagButtons();
 
 
